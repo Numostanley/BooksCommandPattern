@@ -16,30 +16,25 @@ order_class = Order()
 book_list_class = BookList()
 
 def main():
-    user_order = process_order()
-    order = user_order[1]
-    book_list = user_order[0]
-    
-    user_input = input("""
-                Would you like to add another book?
-                1. Yes
-                2. No
-                """)
-    
+   
     while True:
-        if user_input == "1":
-            user_order = process_order()
+        user_order = process_order()
+    
+        order = user_order[1]
+        book_list = user_order[0]
         
-            order = user_order[1]
-            book_list = user_order[0]
-            
-            user_input = input("""
-                       Would you like to add another book?
-                       1. Yes
-                       2. No
-                       """)
-        else:
+        user_input = input("""
+                    Would you like to add another book?
+                    1. Yes
+                    2. No
+                    """)
+        if user_input == "1":
+            continue
+        elif user_input == "2":
             break
+        else:
+            print("Invalid input.")
+            sys.exit(1)
         
     user_input = input("""
                     Would you like to submit order?
@@ -58,10 +53,12 @@ def main():
         actual_invoice = display_invoice.execute()
         
         print(actual_invoice)
+        sys.exit(1)
     
     # cancel user order
     elif user_input == "2":
         print("Order cancelled.")
+        sys.exit(1)
 
 def take_order():
     """script to take user order."""
@@ -73,7 +70,6 @@ def take_order():
                 """)
     
     quantity = int(input("Please input the quantity in number."))
-    
     return [user_input, quantity]
 
 def process_order():
@@ -82,7 +78,7 @@ def process_order():
         book = books_dict[user_order[0]]
     except KeyError as e:
         print(f"Please input a valid number. {e} is not valid")
-        sys.exit()
+        sys.exit(1)
         
     add_book = Invoker()
     add_book.command(AddToBooklistCommand(book, book_list_class))
